@@ -3,12 +3,11 @@ cmake_minimum_required(VERSION 3.0.2)
 project(challenge_pkg)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  rospy
   std_msgs
   nav_msgs
   ackermann_msgs
@@ -20,8 +19,6 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 find_package(GTest REQUIRED)
-
-
 
 ## Generate services in the 'srv' folder
 add_service_files(
@@ -43,16 +40,6 @@ generate_messages(
   actionlib_msgs
 )
 
-################################################
-## Declare ROS dynamic reconfigure parameters ##
-################################################
-
-## Generate dynamic reconfigure parameters in the 'cfg' folder
-# generate_dynamic_reconfigure_options(
-#   cfg/DynReconf1.cfg
-#   cfg/DynReconf2.cfg
-# )
-
 ###################################
 ## catkin specific configuration ##
 ###################################
@@ -63,9 +50,8 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
- #INCLUDE_DIRS include
  INCLUDE_DIRS include
- LIBRARIES challenge_pkg 
+ LIBRARIES challenge_pkg pure_pursuit_lib
  CATKIN_DEPENDS message_runtime std_msgs nav_msgs actionlib_msgs roscpp ackermann_msgs tf
  DEPENDS system_lib
 )
@@ -77,16 +63,15 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-  #include
-  ${catkin_INCLUDE_DIRS}
+  ${PROJECT_SOURCE_DIR}/include
   ${PROJECT_SOURCE_DIR}/lib
+  ${catkin_INCLUDE_DIRS}
   ${GTEST_INCLUDE_DIRS}
 )
 
 ## Link lib directory
-link_directories(lib)
-
-add_subdirectory(lib)
+file(GLOB LIB_SOURCES "${PROJECT_SOURCE_DIR}/lib/*.cpp")
+add_library(pure_pursuit_lib ${LIB_SOURCES})
 
 ## Declare a C++ executable
 add_executable(${PROJECT_NAME} 
@@ -94,11 +79,12 @@ add_executable(${PROJECT_NAME}
   src/path_tracking_controller_node.cpp)
 
 ## Add cmake target dependencies of the executable
-add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} pure_pursuit_lib)
+add_dependencies(${PROJECT_NAME} 
+  ${${PROJECT_NAME}_EXPORTED_TARGETS} 
+  ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(
-  ${PROJECT_NAME}
+target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
   pure_pursuit_lib
 )
@@ -106,8 +92,15 @@ target_link_libraries(
 add_executable(${PROJECT_NAME}_path_sender 
   src/path_sender.cpp
   src/path_sender_node.cpp)
-target_link_libraries(${PROJECT_NAME}_path_sender ${catkin_LIBRARIES})
-add_dependencies(${PROJECT_NAME}_path_sender ${${PROJECT_NAME}_path_sender_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+add_dependencies(${PROJECT_NAME}_path_sender 
+  ${${PROJECT_NAME}_path_sender_EXPORTED_TARGETS} 
+  ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(${PROJECT_NAME}_path_sender 
+  ${catkin_LIBRARIES}
+  pure_pursuit_lib
+)
 
 #############
 ## Testing ##
@@ -115,7 +108,7 @@ add_dependencies(${PROJECT_NAME}_path_sender ${${PROJECT_NAME}_path_sender_EXPOR
 
 ## Add gtest based cpp test target and link libraries
 if(CATKIN_ENABLE_TESTING)
-  catkin_add_gtest(${PROJECT_NAME}_pp_utest tests/pure_pursuit_utest.cpp)
+  catkin_add_gtest(${PROJECT_NAME}_pp_utest test/pure_pursuit_utest.cpp)
   if(TARGET ${PROJECT_NAME}_pp_utest)
     target_link_libraries(${PROJECT_NAME}_pp_utest
       ${catkin_LIBRARIES}
@@ -125,7 +118,7 @@ if(CATKIN_ENABLE_TESTING)
     )
   endif()
 
-  add_rostest_gtest(${PROJECT_NAME}_ptc_utest launch/challenge.test tests/path_tracking_controller_utest.cpp)
+  add_rostest_gtest(${PROJECT_NAME}_ptc_utest launch/challenge.test test/path_tracking_controller_utest.cpp)
   if(TARGET ${PROJECT_NAME}_ptc_utest)
     target_link_libraries(${PROJECT_NAME}_ptc_utest
       ${catkin_LIBRARIES}

@@ -2,7 +2,7 @@
 #include <vector>
 #include <cmath>
 #include <limits>
-#include <pure_pursuit.h>
+#include <challenge_pkg/pure_pursuit.h>
 
 
 // Simple class to implement Pure Pursuit controller

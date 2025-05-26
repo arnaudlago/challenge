@@ -22,6 +22,7 @@ The deliverable is a zip folder with the following structure
     |- src
         |- challenge_pkg
             |- action -> ROS action message definition
+            |- inclune -> contains header files
             |- launch -> ROS launch file to run the ROS node delivered
             |- lib -> Path-Tracking algorythm library
             |- paths -> csv files representing different paths

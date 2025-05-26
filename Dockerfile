@@ -18,8 +18,7 @@ RUN apt-get update && apt-get install -y \
 
 
 # Create and set the working directory
-#WORKDIR /catkin_ws/src
-WORKDIR /challenge
+WORKDIR /challenge/src
 
 # Copy your ROS package into the Docker container
 ADD ./src /challenge/src

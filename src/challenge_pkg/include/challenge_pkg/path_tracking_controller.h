@@ -12,7 +12,7 @@
 #include <actionlib/server/simple_action_server.h>
 #include <challenge_pkg/PauseAction.h>
 #include <challenge_pkg/SetPath.h>
-#include <pure_pursuit.h>
+#include <challenge_pkg/pure_pursuit.h>
 #include <vector>
 #include <string>
 #include <cmath>

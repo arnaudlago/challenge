@@ -11,7 +11,8 @@
 #include <challenge_pkg/SetPath.h>
 #include <map> 
 #include <iostream>
-#include <pure_pursuit.h>
+#include <challenge_pkg/path_tracking_controller.h>
+#include <challenge_pkg/pure_pursuit.h>
 
 
 PathTrackingController::PathTrackingController() :

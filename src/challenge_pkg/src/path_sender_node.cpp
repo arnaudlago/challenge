@@ -1,4 +1,4 @@
-#include "include/path_sender.h"
+#include "challenge_pkg/path_sender.h"
 #include <unistd.h>
 
 //Main function to test the PathTrackingController

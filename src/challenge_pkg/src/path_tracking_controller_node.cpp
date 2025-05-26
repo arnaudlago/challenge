@@ -1,4 +1,4 @@
-#include "path_tracking_controller.h"
+#include "challenge_pkg/path_tracking_controller.h"
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "path_tracking_controller");
