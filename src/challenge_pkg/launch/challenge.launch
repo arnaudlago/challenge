@@ -1,0 +1,29 @@
+<launch>
+
+   <arg name="robot_name" value="gem"/>
+
+    <rosparam param="/path_tracking_controller/comfort_deceleration">3.0</rosparam>
+    <rosparam param="/path_tracking_controller/comfort_steering_angle_velocity">1.0</rosparam>
+    <rosparam param="/path_tracking_controller/max_speed">7.0</rosparam>
+    <rosparam param="/path_tracking_controller/wheelbase">1.75</rosparam>
+    <rosparam param="/path_tracking_controller/max_steering_angle">0.7</rosparam>
+    <rosparam param="/path_tracking_controller/lookahead_distance">5.0</rosparam>
+    <rosparam param="/path_sender/path">"/challenge/src/challenge_pkg/paths/loop.csv"</rosparam>
+
+<!--
+    <include file="$(find gem_gazebo)/launch/gem_gazebo_rviz.launch">
+        <arg name="velodyne_points" default="true"/>
+    </include>
+
+    <include file="$(find gem_gazebo)/launch/gem_sensor_info.launch">
+        <arg name="robot_name" value="$(arg robot_name)" />
+    </include>
+-->
+    <node name="path_tracking_controller" pkg="challenge_pkg" type="challenge_pkg" respawn="false" output="screen">
+        <remap from="/odometry" to="/gem/base_footprint/odom" />
+        <remap from="/ackermann_cmd" to="/gem/ackermann_cmd" />
+    </node>
+
+    <node name="challenge_path_sender" pkg="challenge_pkg" type="challenge_pkg_path_sender" respawn="false" output="screen"></node>
+    
+</launch>

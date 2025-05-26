@@ -1,0 +1,17 @@
+<launch>
+
+    <rosparam param="/path_tracking_controller/comfort_deceleration">2.0</rosparam>
+    <rosparam param="/path_tracking_controller/comfort_steering_angle_velocity">1.0</rosparam>
+    <rosparam param="/path_tracking_controller/max_speed">10.0</rosparam>
+    <rosparam param="/path_tracking_controller/wheelbase">1.75</rosparam>
+    <rosparam param="/path_tracking_controller/max_steering_angle">1.0</rosparam>
+    <rosparam param="/path_tracking_controller/lookahead_distance">5.0</rosparam>
+    <rosparam param="/path_sender/path">"challenge/src/challenge_pkg/Paths/loop.csv"</rosparam>
+
+    <node name="path_tracking_controller" pkg="challenge_pkg" type="challenge_pkg" respawn="false" output="screen">
+    </node>
+
+    <test test-name="challenge_ptc_utest" pkg="challenge_pkg" type="challenge_pkg_ptc_utest" name = "challenge_ptc_utest">
+    </test>
+    
+</launch>
